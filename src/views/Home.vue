@@ -17,12 +17,13 @@
     div.pink-inside(v-else-if='status === 1 && current.length > 1' :style='rcircleCount')
     div.pink-inside(v-else)
     div.rightSquare
+      //- 問題：一按暫停進度條就會消失
       div.rightCircle(ref='rightCircle' v-if='current.length === 1' :style='rightBlue' :class="{circleRightBlue: true}")
-      div.rightCircle(ref='rightCircle' v-if='current.length > 1' :style='rightPink' :class="{circleRightPink: true}")
+      div.rightCircle(ref='rightCircle' v-else-if='current.length > 1' :style='rightPink' :class="{circleRightPink: true}")
       div.rightCircle(ref='rightCircle' v-else)
     div.leftSquare
       div.leftCircle(ref='leftCircle' v-if='current.length === 1' :style='leftBlue' :class="{circleLeftBlue: true}")
-      div.leftCircle(ref='leftCircle' v-if='current.length > 1' :style='leftPink' :class="{circleLeftPink: true}")
+      div.leftCircle(ref='leftCircle' v-else-if='current.length > 1' :style='leftPink' :class="{circleLeftPink: true}")
       div.leftCircle(ref='leftCircle' v-else)
     //- 狀態 break 搭配 icon:play，狀態count 搭配 icon:pause
     b-btn.playBtn(v-if='status !== 1 && current.length === 1' @click='start' :style='bbtnBreak')
@@ -196,15 +197,15 @@ export default {
       }
     },
     pause () {
-      // this.$refs.leftCircle.style.animationPlayState = 'paused'
-      // this.$refs.rightCircle.style.animationPlayState = 'paused'
+      this.$refs.leftCircle.style.animationPlayState = 'paused'
+      this.$refs.rightCircle.style.animationPlayState = 'paused'
       clearInterval(this.timer)
       // 狀態暫停
       this.$store.commit('changeStatus', 2)
     },
     start () {
-      // this.$refs.leftCircle.style.animationPlayState = 'running'
-      // this.$refs.rightCircle.style.animationPlayState = 'running'
+      this.$refs.leftCircle.style.animationPlayState = 'running'
+      this.$refs.rightCircle.style.animationPlayState = 'running'
       // 暫停的話不用改 state.current
       if (this.status !== 2 && this.list.length > 0) {
         this.$store.commit('start')
